@@ -50,11 +50,11 @@ AppDispatcher.register(function(payload) {
       AppStore.emit(CHANGE_EVENT);
       break;
     case AppConstants.RECEIVE_CONTACTS:
-      // Save to state
-      AppStore.setContacts(action.contacts);
-      // emit change
-      AppStore.emit(CHANGE_EVENT);
-      break;
+			// Store Save
+			AppStore.setContacts(action.contacts);
+			//Emit Change
+			AppStore.emit(CHANGE_EVENT);
+			break;
   }
 
   return true;
