@@ -20017,6 +20017,13 @@ var AppActions = {
       actionType: AppConstants.RECEIVE_CONTACTS,
       contacts: contacts
     });
+  },
+
+  removeContact: function(contactId) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.REMOVE_CONTACT,
+      contactId: contactId
+    });
   }
 }
 
@@ -20094,7 +20101,6 @@ var App = React.createClass({displayName: "App",
   },
 
   render: function(){
-    console.log(this.state.contacts);
     return(
       React.createElement("div", null, 
       React.createElement(AddForm, null), 
@@ -20175,7 +20181,8 @@ module.exports = ContactList;
 },{"../actions/AppActions":165,"../stores/AppStore":173,"./Contact.js":168,"react":164}],170:[function(require,module,exports){
 module.exports = {
   SAVE_CONTACT: 'SAVE_CONTACT',
-  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS'
+  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS',
+  REMOVE_CONTACT: 'REMOVE_CONTACT'
 }
 
 },{}],171:[function(require,module,exports){
@@ -20233,6 +20240,11 @@ var AppStore = assign({}, EventEmitter.prototype, {
     _contacts = contacts;
   },
 
+  removeContact: function(contactId) {
+    var index = _contacts.findIndex(x => x.id === contactId);
+    _contacts.splice(index, 1);
+  },
+
   emitchange: function() {
     this.emit(CHANGE_EVENT);
   },
@@ -20262,6 +20274,14 @@ AppDispatcher.register(function(payload) {
     case AppConstants.RECEIVE_CONTACTS:
 			// Store Save
 			AppStore.setContacts(action.contacts);
+			//Emit Change
+			AppStore.emit(CHANGE_EVENT);
+			break;
+    case AppConstants.REMOVE_CONTACT:
+			// Store Remove
+			AppStore.removeContact(action.contactId);
+      // Remove from API
+      AppAPI.removeContact(action.contactId);
 			//Emit Change
 			AppStore.emit(CHANGE_EVENT);
 			break;
@@ -20300,7 +20320,13 @@ module.exports = {
         AppActions.receiveContacts(contacts);
       });
     });
+  },
+
+  removeContact: function(contactId) {
+    this.firebaseRef = new Firebase('https://reactcontact.firebaseIO.com/reactcontact/' + contactId);
+    this.firebaseRef.remove();
   }
+
 }
 
 },{"../actions/AppActions":165,"firebase":3}],175:[function(require,module,exports){
@@ -20331,7 +20357,13 @@ module.exports = {
         AppActions.receiveContacts(contacts);
       });
     });
+  },
+
+  removeContact: function(contactId) {
+    this.firebaseRef = new Firebase('https://reactcontact.firebaseIO.com/reactcontact/' + contactId);
+    this.firebaseRef.remove();
   }
+
 }
 
 },{"../actions/AppActions":165,"firebase":3}]},{},[172]);

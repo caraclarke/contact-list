@@ -25,5 +25,11 @@ module.exports = {
         AppActions.receiveContacts(contacts);
       });
     });
+  },
+
+  removeContact: function(contactId) {
+    this.firebaseRef = new Firebase('https://reactcontact.firebaseIO.com/reactcontact/' + contactId);
+    this.firebaseRef.remove();
   }
+
 }
