@@ -40,6 +40,8 @@ AppDispatcher.register(function(payload) {
     case AppConstants.SAVE_CONTACT:
       // Store Save
       AppStore.saveContact(action.contact);
+      // Save to API
+      AppAPI.saveContact(action.contact);
       // emit change
       AppStore.emit(CHANGE_EVENT);
       break;
