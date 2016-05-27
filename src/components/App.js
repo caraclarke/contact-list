@@ -2,6 +2,7 @@ var React = require('react');
 var AppActions = require('../actions/AppActions');
 var AppStore = require('../stores/AppStore');
 var AddForm = require('./Addform');
+var ContactList = require('./ContactList');
 
 function getAppState() {
   return {
@@ -19,6 +20,7 @@ var App = React.createClass({
     return (
       <div>
         <AddForm />
+        <ContactList contacts={this.state.contacts} />
       </div>
     )
   }

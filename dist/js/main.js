@@ -20010,6 +20010,13 @@ var AppActions = {
       actionType: AppConstants.SAVE_CONTACT,
       contact: contact
     });
+  },
+
+  receiveContacts: function(contacts) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.RECEIVE_CONTACTS,
+      contacts: contacts
+    });
   }
 }
 
@@ -20091,7 +20098,8 @@ module.exports = App;
 
 },{"../actions/AppActions":165,"../stores/AppStore":171,"./Addform":166,"react":164}],168:[function(require,module,exports){
 module.exports = {
-  SAVE_CONTACT: 'SAVE_CONTACT'
+  SAVE_CONTACT: 'SAVE_CONTACT',
+  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS'
 }
 
 },{}],169:[function(require,module,exports){
@@ -20115,6 +20123,8 @@ var App = require('../components/App');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var AppAPI = require('../utils/AppAPI');
+
+AppAPI.getContacts();
 
 ReactDOM.render(
   React.createElement(App, null),
@@ -20143,6 +20153,10 @@ var AppStore = assign({}, EventEmitter.prototype, {
     return _contacts;
   },
 
+  setContacts: function(contacts) {
+    _contacts = contacts;
+  },
+
   emitchange: function() {
     this.emit(CHANGE_EVENT);
   },
@@ -20169,6 +20183,12 @@ AppDispatcher.register(function(payload) {
       // emit change
       AppStore.emit(CHANGE_EVENT);
       break;
+    case AppConstants.RECEIVE_CONTACTS:
+      // Save to state
+      AppStore.setContacts(action.contacts);
+      // emit change
+      AppStore.emit(CHANGE_EVENT);
+      break;
   }
 
   return true;
@@ -20186,6 +20206,24 @@ module.exports = {
     this.firebaseRef.push({
       contact: contact
     });
+  },
+
+  getContacts: function() {
+    this.firebaseRef = new Firebase('https://reactcontact.firebaseIO.com/reactcontact');
+    this.firebaseRef.once('value', function(snapshot){
+      var contacts = [];
+      snapshot.forEach(function(childSnapshot) {
+        var contact = {
+          id: childSnapshot.key,
+          name: childSnapshot.val().contact.name,
+          phone: childSnapshot.val().contact.phone,
+          email: childSnapshot.val().contact.email
+        }
+
+        contacts.push(contact);
+        AppActions.receiveContacts(contacts);
+      });
+    });
   }
 }
 
@@ -20198,6 +20236,24 @@ module.exports = {
     this.firebaseRef = new Firebase('https://reactcontact.firebaseIO.com/reactcontact');
     this.firebaseRef.push({
       contact: contact
+    });
+  },
+
+  getContacts: function() {
+    this.firebaseRef = new Firebase('https://reactcontact.firebaseIO.com/reactcontact');
+    this.firebaseRef.once('value', function(snapshot){
+      var contacts = [];
+      snapshot.forEach(function(childSnapshot) {
+        var contact = {
+          id: childSnapshot.key,
+          name: childSnapshot.val().contact.name,
+          phone: childSnapshot.val().contact.phone,
+          email: childSnapshot.val().contact.email
+        }
+
+        contacts.push(contact);
+        AppActions.receiveContacts(contacts);
+      });
     });
   }
 }
