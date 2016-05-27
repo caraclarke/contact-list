@@ -24,7 +24,6 @@ var App = React.createClass({
   },
 
   render: function(){
-    console.log(this.state.contacts);
     return(
       <div>
       <AddForm />
