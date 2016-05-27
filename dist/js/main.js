@@ -19040,6 +19040,55 @@ module.exports = require('./lib/React');
 },{"./lib/React":26}],159:[function(require,module,exports){
 
 },{}],160:[function(require,module,exports){
+var React = require('react');
+var AppActions = require('../actions/AppActions');
+var AppStore = require('../stores/AppStore');
+
+var AddForm = React.createClass({displayName: "AddForm",
+
+  render: function() {
+    return (
+      React.createElement("div", {className: "well"}, 
+        React.createElement("h3", null, "Add Contact"), 
+
+        React.createElement("form", null, 
+          React.createElement("div", {className: "form-group"}, 
+            React.createElement("input", {type: "text", ref: "name", className: "form-control", placeholder: "Add Contact First & Last Name"})
+          ), 
+          React.createElement("div", {className: "form-group"}, 
+            React.createElement("input", {type: "text", ref: "phone", className: "form-control", placeholder: "Add Contact Phone Number"})
+          ), 
+          React.createElement("div", {className: "form-group"}, 
+            React.createElement("input", {type: "text", ref: "email", className: "form-control", placeholder: "Add Contact Email address"})
+          )
+        )
+      )
+    )
+  }
+});
+
+module.exports = AddForm;
+
+},{"../actions/AppActions":159,"../stores/AppStore":163,"react":158}],161:[function(require,module,exports){
+var React = require('react');
+var AppActions = require('../actions/AppActions');
+var AppStore = require('../stores/AppStore');
+var AddForm = require('./Addform');
+
+var App = React.createClass({displayName: "App",
+
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement(AddForm, null)
+      )
+    )
+  }
+});
+
+module.exports = App;
+
+},{"../actions/AppActions":159,"../stores/AppStore":163,"./Addform":160,"react":158}],162:[function(require,module,exports){
 var App = require('../components/App');
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -19050,6 +19099,8 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
-},{"../components/App":159,"../utils/AppAPI":161,"react":158,"react-dom":2}],161:[function(require,module,exports){
+},{"../components/App":161,"../utils/AppAPI":164,"react":158,"react-dom":2}],163:[function(require,module,exports){
 
-},{}]},{},[160]);
+},{}],164:[function(require,module,exports){
+
+},{}]},{},[162]);
